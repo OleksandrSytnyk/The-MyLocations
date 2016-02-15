@@ -15,10 +15,11 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     @IBOutlet weak var getButton: UIButton!
     
     let locationManager = CLLocationManager()
+    var location: CLLocation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        updateLabels()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,6 +53,9 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
         print("didUpdateWithError \(newLocation)")
+        
+        location = newLocation
+        updateLabels()
     }
     
     func showLocationServicesDeniedAlert() {
@@ -62,5 +66,20 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         presentViewController(alert, animated: true, completion: nil)
         alert.addAction(okAction)
     }//This pops up an alert with a helpful hint.
+    
+    func updateLabels() {
+        if let location = location {//that it’s OK for the unwrapped variable to have the same name as the optional
+        latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)
+        longitudeLabel.text = String(format: "%.8f", location.coordinate.longitude)
+        tagButton.hidden = false
+        messageLabel.text = ""
+    } else {
+        latitudeLabel.text = ""
+        longitudeLabel.text = ""
+        addressLabel.text = ""
+        tagButton.hidden = true
+        messageLabel.text = "Tap 'Get My Location' to Start"
+        }
+    }
 }
 
