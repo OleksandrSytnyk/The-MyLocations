@@ -16,6 +16,8 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     
     let locationManager = CLLocationManager()
     var location: CLLocation?
+    var updatingLocation = false //You’re using the updatingLocation boolean to let the user know that the app is actively looking up her location.
+    var lastLocationError: NSError?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,21 +41,28 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             return
         }
         
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.startUpdatingLocation()
+        startLocationManager()
+        updateLabels()
     }
 
     // MARK: - CLLocationManagerDelegate
     
-    func localManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("didFailWithError \(error)")
+        
+        if error.code == CLError.LocationUnknown.rawValue {//You ask for the rawValue to convert enumaration names for CLError back to an integer values.
+            return
+        }
+        lastLocationError = error
+        stopLocationManager()
+        updateLabels()
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
         print("didUpdateWithError \(newLocation)")
         
+        lastLocationError = nil
         location = newLocation
         updateLabels()
     }
@@ -79,6 +88,39 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         addressLabel.text = ""
         tagButton.hidden = true
         messageLabel.text = "Tap 'Get My Location' to Start"
+            
+            let statusMessage: String
+            if let error = lastLocationError {
+                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
+                statusMessage = "Location Service Disabled"
+            } else {
+                statusMessage = "Error Getting Location"
+                }
+            } else if !CLLocationManager.locationServicesEnabled(){
+                statusMessage = "Location Service Disabled"
+            } else if updatingLocation {
+                statusMessage = "Searching..."
+            } else {
+                statusMessage = "Tap 'Get My Location' to Start"
+            }
+            messageLabel.text = statusMessage
+        }
+    }
+   
+    func stopLocationManager() {
+        if updatingLocation {
+        locationManager.startUpdatingLocation()
+        locationManager.delegate = nil
+        updatingLocation = false
+        }
+    }
+    
+        func startLocationManager() {
+        if CLLocationManager.locationServicesEnabled() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.startUpdatingLocation()
+        updatingLocation = true
         }
     }
 }
