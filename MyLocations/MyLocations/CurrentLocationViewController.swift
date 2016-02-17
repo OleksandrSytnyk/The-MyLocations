@@ -22,6 +22,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLabels()
+        configureGetButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,8 +42,16 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             return
         }
         
-        startLocationManager()
+        if updatingLocation {
+            stopLocationManager()
+        } else {
+            location = nil
+            lastLocationError = nil
+            startLocationManager()
+        }
+        
         updateLabels()
+        configureGetButton()
     }
 
     // MARK: - CLLocationManagerDelegate
@@ -56,6 +65,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         lastLocationError = error
         stopLocationManager()
         updateLabels()
+        configureGetButton()
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -78,6 +88,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         if newLocation.horizontalAccuracy <= locationManager.desiredAccuracy {
             print("*** We're done!")
             stopLocationManager()
+            configureGetButton()
             }
         }
     }
@@ -138,5 +149,14 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         updatingLocation = true
         }
     }
+    
+        func configureGetButton() {
+        if updatingLocation {
+        getButton.setTitle("Stop", forState: .Normal)
+        } else {
+        getButton.setTitle("Get My Location", forState: .Normal)
+        }
+    }
+    
 }
 
