@@ -18,6 +18,10 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     var location: CLLocation?
     var updatingLocation = false //You’re using the updatingLocation boolean to let the user know that the app is actively looking up her location.
     var lastLocationError: NSError?
+    let geocoder = CLGeocoder()
+    var placemark: CLPlacemark?
+    var performingReverseGeocoding = false
+    var lastGeocodingError: NSError?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +51,8 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         } else {
             location = nil
             lastLocationError = nil
+            placemark = nil
+            lastGeocodingError = nil
             startLocationManager()
         }
         
@@ -90,6 +96,24 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             stopLocationManager()
             configureGetButton()
             }
+            
+            if !performingReverseGeocoding {
+                print("*** Going to geocode")
+                performingReverseGeocoding = true
+                geocoder.reverseGeocodeLocation(newLocation, completionHandler: {
+                placemarks, error in
+                print("*** Found placemarks: \(placemarks), error: \(error)")
+                
+                self.lastGeocodingError = error
+                if error == nil, let p = placemarks where !p.isEmpty {
+                    self.placemark = p.last!
+                } else {
+                    self.placemark = nil }
+                self.performingReverseGeocoding = false
+                self.updateLabels()
+                })
+            //the statements in the closure are not executed right away when locationManager(didUpdateLocations) is called. Instead, the closure and everything inside it is given to CLGeocoder, which keeps it until later when it has performed the reverse geocoding operation. Only then will it execute the code from the closure.
+            }
         }
     }
     
@@ -108,6 +132,16 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         longitudeLabel.text = String(format: "%.8f", location.coordinate.longitude)
         tagButton.hidden = false
         messageLabel.text = ""
+           
+            if let placemark = placemark {
+                addressLabel.text = stringFromPlacemark(placemark)
+            } else if performingReverseGeocoding {
+                addressLabel.text = "Searching for Address..."
+            } else if lastGeocodingError != nil {
+                addressLabel.text = "Error Finding Address"
+            } else {
+                addressLabel.text = "No Address Found"
+            }
     } else {
         latitudeLabel.text = ""
         longitudeLabel.text = ""
@@ -156,6 +190,28 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         } else {
         getButton.setTitle("Get My Location", forState: .Normal)
         }
+    }
+    
+    func stringFromPlacemark (placemark: CLPlacemark) -> String {
+        var line1 = ""
+        
+        if let s = placemark.subThoroughfare {//subThoroughfare is a strange name for house number.
+        line1 += s + " "
+        }
+        if let s = placemark.thoroughfare {//the thoroughfare is the street name
+        line1 += s
+        }
+        var line2 = ""
+        if let s = placemark.locality {//the locality is the city name
+        line2 += s + " "
+        }
+        if let s = placemark.administrativeArea {//the administrativearea is the state or province name
+        line2 += s + " "
+        }
+        if let s = placemark.postalCode {
+        line2 += s
+        }
+        return line1 + "\n" + line2
     }
     
 }
