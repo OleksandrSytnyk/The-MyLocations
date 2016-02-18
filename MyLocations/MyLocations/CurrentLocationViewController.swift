@@ -86,6 +86,12 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             return
         }
         
+        var distance = CLLocationDistance(DBL_MAX)
+        
+        if let location = location {
+            distance = newLocation.distanceFromLocation(location)
+        }//This calculates the distance between the new reading and the previous reading, if there was one. If there was no previous reading, then the distance is DBL_MAX. That is a built-in constant that represents the maximum value that a floating-point number can have. You’re doing that so any of the following calculations still work even if you weren’t able to calculate a true distance yet.
+        
         if location == nil || location!.horizontalAccuracy > newLocation.horizontalAccuracy {
             lastLocationError = nil
             location = newLocation
@@ -95,6 +101,10 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             print("*** We're done!")
             stopLocationManager()
             configureGetButton()
+            
+            if distance > 0 {
+                performingReverseGeocoding = false
+                }
             }
             
             if !performingReverseGeocoding {
@@ -114,6 +124,14 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
                 })
             //the statements in the closure are not executed right away when locationManager(didUpdateLocations) is called. Instead, the closure and everything inside it is given to CLGeocoder, which keeps it until later when it has performed the reverse geocoding operation. Only then will it execute the code from the closure.
             }
+                } else if distance < 1.0 {
+            let timeInterval = newLocation.timestamp.timeIntervalSinceDate(location!.timestamp)
+            if timeInterval > 10 {
+            print("*** Forcedone!")
+            }
+            stopLocationManager()
+            updateLabels()
+            configureGetButton()
         }
     }
     
