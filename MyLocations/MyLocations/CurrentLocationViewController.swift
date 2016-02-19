@@ -22,6 +22,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     var placemark: CLPlacemark?
     var performingReverseGeocoding = false
     var lastGeocodingError: NSError?
+    var timer: NSTimer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -187,6 +188,9 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
    
     func stopLocationManager() {
         if updatingLocation {
+            if let timer = timer {
+                timer.invalidate()//to cancel the timer in case the location manager is stopped before the time-out fires.
+            }
         locationManager.startUpdatingLocation()
         locationManager.delegate = nil
         updatingLocation = false
@@ -199,6 +203,9 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.startUpdatingLocation()
         updatingLocation = true
+            
+        timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: Selector("didTimeOut"), userInfo: nil, repeats: false)
+            //it's a timer object that sends the “didTimeOut” message to self after 60 seconds; didTimeOut is the name of a method that you have to provide.
         }
     }
     
@@ -230,6 +237,16 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         line2 += s
         }
         return line1 + "\n" + line2
+    }
+    
+    func didTimeOut() {
+        print("*** Time out")
+        if location == nil {
+        stopLocationManager()
+        lastLocationError = NSError(domain: "MYLocationErrorDomain", code: 1, userInfo: nil)// So it's not an error from kCLErrorDomain. It's user's own domain which is just a String.
+        updateLabels()
+        configureGetButton()
+        }
     }
     
 }
