@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E46C14391C79A1F60011F9BF /* LocationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */; };
 		E4B2A3F11C6E0A2200F2EC45 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2A3F01C6E0A2200F2EC45 /* AppDelegate.swift */; };
 		E4B2A3F31C6E0A2200F2EC45 /* CurrentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2A3F21C6E0A2200F2EC45 /* CurrentLocationViewController.swift */; };
 		E4B2A3F51C6E0A2200F2EC45 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2A3F41C6E0A2200F2EC45 /* SecondViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDetailsViewController.swift; sourceTree = "<group>"; };
 		E4B2A3ED1C6E0A2200F2EC45 /* MyLocations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLocations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B2A3F01C6E0A2200F2EC45 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4B2A3F21C6E0A2200F2EC45 /* CurrentLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				E4B2A3F91C6E0A2200F2EC45 /* Assets.xcassets */,
 				E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */,
 				E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */,
+				E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */,
 			);
 			path = MyLocations;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B2A3F51C6E0A2200F2EC45 /* SecondViewController.swift in Sources */,
+				E46C14391C79A1F60011F9BF /* LocationDetailsViewController.swift in Sources */,
 				E4B2A3F11C6E0A2200F2EC45 /* AppDelegate.swift in Sources */,
 				E4B2A3F31C6E0A2200F2EC45 /* CurrentLocationViewController.swift in Sources */,
 			);
@@ -288,6 +292,7 @@
 				E4B2A4031C6E0A2300F2EC45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
