@@ -146,10 +146,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Section-2" id="J7r-UC-BbT">
+                            <tableViewSection id="J7r-UC-BbT">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="abU-dn-Yvz">
-                                        <rect key="frame" x="0.0" y="297" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="282" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="abU-dn-Yvz" id="eVP-CE-R9R">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -167,10 +167,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Section-3" id="Abr-2n-JT0">
+                            <tableViewSection id="Abr-2n-JT0">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="3rw-Ss-LTu" detailTextLabel="nlD-Zh-ySQ" style="IBUITableViewCellStyleValue1" id="Zw3-dv-NvB">
-                                        <rect key="frame" x="0.0" y="392" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="362" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Zw3-dv-NvB" id="dRM-UB-ruc">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -194,7 +194,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="p5u-Ni-fcz" detailTextLabel="J2p-Me-Qpd" style="IBUITableViewCellStyleValue1" id="KTe-2L-KAX">
-                                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="406" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KTe-2L-KAX" id="KVy-t4-6Fk">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -218,7 +218,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="FuL-Gn-323">
-                                        <rect key="frame" x="0.0" y="480" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="450" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FuL-Gn-323" id="zZc-gD-ing">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -241,7 +241,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="KK8-Rf-qfk" detailTextLabel="pGi-yS-WaE" style="IBUITableViewCellStyleValue1" id="0Lb-bu-d0e">
-                                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="494" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Lb-bu-d0e" id="y6W-fV-29F">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -285,12 +285,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="addressLabel" destination="oWx-bd-AQ5" id="8EE-36-vQF"/>
-                        <outlet property="categoryLabel" destination="vPz-Ik-deA" id="yaC-3C-Fa4"/>
-                        <outlet property="dateLabel" destination="KK8-Rf-qfk" id="sS2-Ze-Eyr"/>
+                        <outlet property="addressLabel" destination="Bcy-D1-SBw" id="Vjn-MW-b6g"/>
+                        <outlet property="categoryLabel" destination="Duk-Zd-BVz" id="lWh-IT-Gd3"/>
+                        <outlet property="dateLabel" destination="pGi-yS-WaE" id="gtd-sk-Nzm"/>
                         <outlet property="descriptionTextView" destination="inQ-a7-boI" id="mHX-AE-IvH"/>
-                        <outlet property="latitudeLabel" destination="3rw-Ss-LTu" id="bhq-pZ-6eO"/>
-                        <outlet property="longitudeLabel" destination="p5u-Ni-fcz" id="nBP-Bv-CMU"/>
+                        <outlet property="latitudeLabel" destination="nlD-Zh-ySQ" id="H8v-G6-Dn3"/>
+                        <outlet property="longitudeLabel" destination="J2p-Me-Qpd" id="H1s-a2-lQy"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aaL-Zc-W9n" userLabel="First Responder" sceneMemberID="firstResponder"/>
