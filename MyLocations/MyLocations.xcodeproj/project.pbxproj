@@ -14,6 +14,7 @@
 		E4B2A3F81C6E0A2200F2EC45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3F61C6E0A2200F2EC45 /* Main.storyboard */; };
 		E4B2A3FA1C6E0A2200F2EC45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3F91C6E0A2200F2EC45 /* Assets.xcassets */; };
 		E4B2A3FD1C6E0A2300F2EC45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */; };
+		E4D437EF1C7B9CA10062C68B /* CategoryPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D437EE1C7B9CA00062C68B /* CategoryPickerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		E4B2A3F91C6E0A2200F2EC45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4B2A3FC1C6E0A2300F2EC45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D437EE1C7B9CA00062C68B /* CategoryPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryPickerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */,
 				E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */,
 				E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */,
+				E4D437EE1C7B9CA00062C68B /* CategoryPickerViewController.swift */,
 			);
 			path = MyLocations;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				E4B2A3F51C6E0A2200F2EC45 /* SecondViewController.swift in Sources */,
 				E46C14391C79A1F60011F9BF /* LocationDetailsViewController.swift in Sources */,
 				E4B2A3F11C6E0A2200F2EC45 /* AppDelegate.swift in Sources */,
+				E4D437EF1C7B9CA10062C68B /* CategoryPickerViewController.swift in Sources */,
 				E4B2A3F31C6E0A2200F2EC45 /* CurrentLocationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
