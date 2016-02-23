@@ -99,6 +99,20 @@ class LocationDetailsViewController: UITableViewController {
         }
     }
     
+       override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if indexPath.section == 0 || indexPath.section == 1 {
+        return indexPath
+    } else {
+        return nil
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0 && indexPath.row == 0 {
+        descriptionTextView.becomeFirstResponder()
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             if segue.identifier == "PickCategory" {
             let controller = segue.destinationViewController as! CategoryPickerViewController
@@ -111,4 +125,6 @@ class LocationDetailsViewController: UITableViewController {
         categoryName = controller.selectedCategoryName
         categoryLabel.text = categoryName
     }
+    
+    
 }
