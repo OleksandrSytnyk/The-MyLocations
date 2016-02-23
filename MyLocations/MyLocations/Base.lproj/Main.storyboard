@@ -326,7 +326,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="0Fj-tF-zAb" kind="unwind" unwindAction="categoryPickerDidPickCategory:" id="26F-T8-Wsi"/>
+                                    <segue destination="0Fj-tF-zAb" kind="unwind" identifier="PickedCategory" unwindAction="categoryPickerDidPickCategory:" id="26F-T8-Wsi"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
