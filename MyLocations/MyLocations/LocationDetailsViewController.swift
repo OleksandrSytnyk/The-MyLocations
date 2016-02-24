@@ -42,6 +42,19 @@ class LocationDetailsViewController: UITableViewController {
         addressLabel.text = "No Address Found"
         }
         dateLabel.text = formatDate(NSDate())
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("hideKeyboard:"))
+        gestureRecognizer.cancelsTouchesInView = false
+        tableView.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    func hideKeyboard(gestureRecognizer: UIGestureRecognizer) {
+        let point = gestureRecognizer.locationInView(tableView)
+        let indexPath = tableView.indexPathForRowAtPoint(point)
+        if indexPath != nil && indexPath!.section == 0 && indexPath!.row == 0 {//It is possible that the user taps inside the table view but not on a cell, for example somewhere in between two sections or on the section header. In that case indexPath will be nil, making this an optional (of type NSIndexPath?).
+        return
+        }
+        descriptionTextView.resignFirstResponder()
     }
     
     func stringFromPlacemark(placemark: CLPlacemark) -> String {
