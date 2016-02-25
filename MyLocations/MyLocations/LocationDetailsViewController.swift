@@ -91,9 +91,9 @@ class LocationDetailsViewController: UITableViewController {
             animated: true)
         hudView.text = "Tagged"
         
-        afterDelay(0.6, closure: {
+        afterDelay(0.6) {
             self.dismissViewControllerAnimated(true, completion: nil)
-        })
+        }
     }
     
     @IBAction func cancel() {
