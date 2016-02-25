@@ -43,9 +43,10 @@ class HudView: UIView {
         alpha = 0
         transform = CGAffineTransformMakeScale(1.3, 1.3)
         
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animateWithDuration(0.3, delay: 1, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
         self.alpha = 1
-        self.transform = CGAffineTransformIdentity})
+            self.transform = CGAffineTransformIdentity},
+            completion: nil)
         }
     }
 }
