@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        let tabBarController = window!.rootViewController
+            as! UITabBarController
+        if let tabBarViewControllers = tabBarController.viewControllers {
+        let currentLocationViewController = tabBarViewControllers[0] as! CurrentLocationViewController
+        currentLocationViewController.managedObjectContext = managedObjectContext
+        }
         return true
     }
 
@@ -40,7 +46,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
+   
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        guard let modelURL = NSBundle.mainBundle().URLForResource("DataModel", withExtension: "momd") else {
+        fatalError("Could not find data model in app bundle")
+        }//The Core Data model you created earlier is stored in your application bundle in a folder named “DataModel.momd”. Here you create an NSURL object pointing at this folder in the app bundle.
+        
+        guard let model = NSManagedObjectModel(contentsOfURL: modelURL) else {
+        fatalError("Error initializing model from: \(modelURL)")
+        }//Create an NSManagedObjectModel from that URL.
+        
+        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let documentsDirectory = urls[0]
+        let storeURL = documentsDirectory.URLByAppendingPathComponent("DataStore.sqlite")
+        // The app’s data is stored in an SQLite database inside the app’s Documents folder. Here you create an NSURL object pointing at the DataStore.sqlite file.
+        do {
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+         // The NSPersistentStoreCoordinator object is in charge of the SQLite database.
+        try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
+        configuration: nil, URL: storeURL, options: nil)
+          //Add SQLite database to the store coordinator
+        let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)//create the NSManagedObjectContext object, which is the object that you use to talk to Core Data. You first make your changes to the context and then you call its save() method to store those changes permanently in the data store. That means every object that needs to do something with Core Data needs to have a reference to the NSManagedObjectContext object.
+        context.persistentStoreCoordinator = coordinator
+            
+        return context
+        }
+            
+        catch {
+            fatalError("Error adding persistent store at \(storeURL): \(error)")
+        }
+    }()//This is the method to load the data model that is defined in DataModel.xcdatamodeld, and connect it to an SQLite data store. This is very standard stuff that will be the same for almost any Core Data app you’ll write.
+    
 
 }
 
