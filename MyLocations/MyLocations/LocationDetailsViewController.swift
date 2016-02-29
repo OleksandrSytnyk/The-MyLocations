@@ -106,7 +106,7 @@ class LocationDetailsViewController: UITableViewController {
         do {
             try managedObjectContext.save()
         } catch {
-            fatalError("Error: \(error)")
+            fatalCoreDataError(error)
         }
         
         afterDelay(0.6) {
