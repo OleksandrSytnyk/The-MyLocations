@@ -32,10 +32,28 @@ class LocationDetailsViewController: UITableViewController {
     var categoryName = "No Category"
     var managedObjectContext: NSManagedObjectContext!
     var date = NSDate()
-   
+    var descriptionText = ""
+    
+    var locationToEdit: Location? {
+        didSet {
+            if let location = locationToEdit {
+                descriptionText = location.locationDescription
+                categoryName = location.category
+                date = location.date
+                coordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude)
+                placemark = location.placemark
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        descriptionTextView.text = ""
+        
+        if let location = locationToEdit {
+            title = "Edit Location"
+        }
+        
+        descriptionTextView.text = descriptionText
         categoryLabel.text = categoryName
         latitudeLabel.text = String(format: "%.8f", coordinate.latitude)
         longitudeLabel.text = String(format: "%.8f", coordinate.longitude)
@@ -92,10 +110,16 @@ class LocationDetailsViewController: UITableViewController {
     @IBAction func done() {
         let hudView = HudView.hudInView(navigationController!.view,
             animated: true)
-        hudView.text = "Tagged"
         
-        let location = NSEntityDescription.insertNewObjectForEntityForName("Location", inManagedObjectContext: managedObjectContext) as! Location
-        
+        let location: Location
+        if let temp = locationToEdit {
+            hudView.text = "Updated"
+            location = temp
+        } else {
+            hudView.text = "Tagged"
+             location = NSEntityDescription.insertNewObjectForEntityForName("Location", inManagedObjectContext: managedObjectContext) as! Location
+        }
+               
         location.locationDescription = descriptionTextView.text
         location.category = categoryName
         location.latitude = coordinate.latitude
