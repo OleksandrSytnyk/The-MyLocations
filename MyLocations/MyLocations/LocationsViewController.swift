@@ -37,6 +37,7 @@ class LocationsViewController: UITableViewController {
         super.viewDidLoad()
         
         performFetch()
+        navigationItem.rightBarButtonItem = editButtonItem()//Every view controller has a built-in Edit button that can be accessed through the editButtonItem() method. 
     }
     
     func performFetch() {
