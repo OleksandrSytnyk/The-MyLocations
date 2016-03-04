@@ -22,12 +22,13 @@ class LocationsViewController: UITableViewController {
         
         fetchRequest.entity = entity
         
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        let sortDescriptor1 = NSSortDescriptor(key: "category", ascending: true)
+        let sortDescriptor2 = NSSortDescriptor(key: "date", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor1, sortDescriptor2]
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchBatchSize = 20//The fetch batch size setting allows you to tweak how many objects will be fetched at a time.
         
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: "Locations")//The cacheName needs to be a unique name that NSFetchedResultsController uses to cache the search results.
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "category", cacheName: "Locations")//The cacheName needs to be a unique name that NSFetchedResultsController uses to cache the search results.
         
         fetchedResultsController.delegate = self
         return fetchedResultsController
@@ -37,7 +38,7 @@ class LocationsViewController: UITableViewController {
         super.viewDidLoad()
         
         performFetch()
-        navigationItem.rightBarButtonItem = editButtonItem()//Every view controller has a built-in Edit button that can be accessed through the editButtonItem() method. 
+        navigationItem.rightBarButtonItem = editButtonItem()//Every view controller has a built-in Edit button that can be accessed through the editButtonItem() method.
     }
     
     func performFetch() {
@@ -83,6 +84,15 @@ class LocationsViewController: UITableViewController {
             }
         }
     }// As soon as you implement this method in your view controller, it enables swipe-to-delete.
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return fetchedResultsController.sections!.count
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.name
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EditLocation" {
