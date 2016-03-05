@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let locationsViewController = navigationController.viewControllers[0] as! LocationsViewController
             locationsViewController.managedObjectContext = managedObjectContext
             let _ = locationsViewController.view// You need this line to fix the IOS bug
+            let mapViewController = tabBarViewControllers[2] as! MapViewController
+            mapViewController.managedObjectContext = managedObjectContext
         }
         listenForFatalCoreDataNotifications()
         return true
