@@ -81,9 +81,43 @@ class MapViewController: UIViewController {
                     }
         return mapView.regionThatFits(region)
     }
-
+    func showLocationDetails(sender: UIButton) {
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
+        
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+   
+    guard annotation is Location else {
+    return nil
+    }
+  
+    let identifier = "location"
+    var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as! MKPinAnnotationView!
+    
+    if annotationView == nil {
+        annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)//you’re not limited to using MKPinAnnotationView for your annotations. This is the standard annotation view class, but you can also create your own MKAnnotationView subclass and make it look like anything you want. Pins are only one option.
+     
+        annotationView.enabled = true
+        annotationView.canShowCallout = true
+        annotationView.animatesDrop = false
+        annotationView.pinTintColor = UIColor(red: 0.32, green: 0.82, blue: 0.4, alpha: 1)
+      
+        let rightButton = UIButton(type: .DetailDisclosure)
+        rightButton.addTarget(self, action: Selector("showLocationDetails:"), forControlEvents: .TouchUpInside)//it's the target-action pattern to hook up the button’s “Touch Up Inside” event with a showLocationDetails() method
+        
+        annotationView.rightCalloutAccessoryView = rightButton
+    } else {
+        annotationView.annotation = annotation
+        }
 
-}
+    let button = annotationView.rightCalloutAccessoryView as! UIButton
+    
+    if let index = locations.indexOf(annotation as! Location) {
+        button.tag = index
+        }
+        return annotationView
+        }
+    }
+
