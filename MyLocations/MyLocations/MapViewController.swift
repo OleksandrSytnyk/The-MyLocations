@@ -23,7 +23,15 @@ class MapViewController: UIViewController {
             queue: NSOperationQueue.mainQueue()) {//This notification is sent out by the managedObjectContext whenever the data store changes. In response you would like the following closure to be called.
             notification in //Because this closure gets called by NSNotificationCenter, you’re given an NSNotification object in the notification parameter.
             if self.isViewLoaded() {//You only call updateLocations() when the Maps screen’s view is loaded.
-                self.updateLocations()
+                
+                if let dictionary = notification.userInfo {
+                print(dictionary["inserted"])
+                print(dictionary["deleted"])
+                print(dictionary["updated"])
+                print("Hello \(dictionary["updated"])")
+                print("Hello \(dictionary["deleted"])")
+                    self.updateLocations()
+                    }
                 }
             }
         }
@@ -59,6 +67,7 @@ class MapViewController: UIViewController {
         
         locations = try! managedObjectContext.executeFetchRequest(fetchRequest) as! [Location]
         mapView.addAnnotations(locations)
+        
     }
     
     
@@ -95,6 +104,7 @@ class MapViewController: UIViewController {
                     }
         return mapView.regionThatFits(region)
     }
+    
     func showLocationDetails(sender: UIButton) {
     performSegueWithIdentifier("EditLocation", sender: sender)
     }
