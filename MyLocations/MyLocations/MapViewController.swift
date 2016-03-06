@@ -12,8 +12,22 @@ import CoreData
 
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
-    var managedObjectContext: NSManagedObjectContext!
+    
     var locations = [Location]()
+    
+    var managedObjectContext: NSManagedObjectContext! {
+        
+        didSet {
+            NSNotificationCenter.defaultCenter().addObserverForName( NSManagedObjectContextObjectsDidChangeNotification,
+            object: managedObjectContext,
+            queue: NSOperationQueue.mainQueue()) {//This notification is sent out by the managedObjectContext whenever the data store changes. In response you would like the following closure to be called.
+            notification in //Because this closure gets called by NSNotificationCenter, you’re given an NSNotification object in the notification parameter.
+            if self.isViewLoaded() {//You only call updateLocations() when the Maps screen’s view is loaded.
+                self.updateLocations()
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,7 +109,6 @@ class MapViewController: UIViewController {
             controller.locationToEdit = location
         }
     }
-    
 }
 
 extension MapViewController: MKMapViewDelegate {
