@@ -25,7 +25,6 @@ class LocationDetailsViewController: UITableViewController {
     @IBOutlet weak var longitudeLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
- 
     
     var coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var placemark: CLPlacemark?
@@ -128,7 +127,18 @@ class LocationDetailsViewController: UITableViewController {
         location.placemark = placemark
         
         do {
-            try managedObjectContext.save()
+            
+        try managedObjectContext.save()
+            
+            if locationToEdit == nil {
+                operation = "inserted"
+            } else {
+                operation = "updated"
+            }
+            changedLocation = location
+
+             NSNotificationCenter.defaultCenter().postNotificationName(updateLocationMessage, object: managedObjectContext)
+           
         } catch {
             fatalCoreDataError(error)
         }

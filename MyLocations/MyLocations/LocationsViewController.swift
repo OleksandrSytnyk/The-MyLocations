@@ -78,7 +78,13 @@ class LocationsViewController: UITableViewController {
             managedObjectContext.deleteObject(location)
             
             do {
+                
                 try managedObjectContext.save()
+                
+                changedLocation = location
+                operation = "deleted"
+                NSNotificationCenter.defaultCenter().postNotificationName(updateLocationMessage, object: managedObjectContext)
+                
             } catch {
                 fatalCoreDataError(error)
             }

@@ -10,33 +10,45 @@ import UIKit
 import MapKit
 import CoreData
 
+let updateLocationMessage = "updateLocation"
+var operation = ""
+var changedLocation: Location?
+
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     var locations = [Location]()
+    let nc = NSNotificationCenter.defaultCenter()
+   
     
     var managedObjectContext: NSManagedObjectContext! {
         
         didSet {
-            NSNotificationCenter.defaultCenter().addObserverForName( NSManagedObjectContextObjectsDidChangeNotification,
-            object: managedObjectContext,
-            queue: NSOperationQueue.mainQueue()) {//This notification is sent out by the managedObjectContext whenever the data store changes. In response you would like the following closure to be called.
-            notification in //Because this closure gets called by NSNotificationCenter, you’re given an NSNotification object in the notification parameter.
-            if self.isViewLoaded() {//You only call updateLocations() when the Maps screen’s view is loaded.
-                
-                if let dictionary = notification.userInfo {
-                print(dictionary["inserted"])
-                print(dictionary["deleted"])
-                print(dictionary["updated"])
-                print("Hello \(dictionary["updated"])")
-                print("Hello \(dictionary["deleted"])")
-                    self.updateLocations()
-                    }
-                }
+            
+            nc.addObserver(self, selector: "updateLocation:", name: updateLocationMessage, object: managedObjectContext)
+            nc.postNotificationName(updateLocationMessage,
+                object: managedObjectContext,
+                userInfo: nil)
+        }
+    }
+   
+    func updateLocation(location: Location) {
+        if self.isViewLoaded() {
+    switch operation {
+            
+        case "updated":
+            mapView.removeAnnotation(locations[locations.indexOf(changedLocation!)!])
+            mapView.addAnnotation(changedLocation!)
+            
+        case "deleted":
+            mapView.removeAnnotation(changedLocation!)
+            
+        default:
+            mapView.addAnnotation(changedLocation!)
             }
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLocations()
@@ -56,20 +68,6 @@ class MapViewController: UIViewController {
         let region = regionForAnnotations(locations)
         mapView.setRegion(region, animated: true)
     }
-
-    func updateLocations() {
-    mapView.removeAnnotations(locations)//an annotation is a pin on the map
-    
-    let entity = NSEntityDescription.entityForName("Location", inManagedObjectContext: managedObjectContext)
-        
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entity
-        
-        locations = try! managedObjectContext.executeFetchRequest(fetchRequest) as! [Location]
-        mapView.addAnnotations(locations)
-        
-    }
-    
     
     func regionForAnnotations(annotations: [MKAnnotation]) -> MKCoordinateRegion {
         
