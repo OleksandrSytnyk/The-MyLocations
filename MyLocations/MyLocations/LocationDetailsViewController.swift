@@ -184,6 +184,7 @@ class LocationDetailsViewController: UITableViewController {
         } else if indexPath.section == 1 && indexPath.row == 0 {
             pickPhoto()
              }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -202,7 +203,7 @@ class LocationDetailsViewController: UITableViewController {
 
 extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func takePhotoWithCamara() {
+    func takePhotoWithCamera() {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .Camera
         imagePicker.delegate = self
@@ -227,8 +228,8 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func pickPhoto() {
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-        showPhotoMenu()
+        if true || UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        showPhotoMenu()// true || is to use Simulator for checking the code which does with the camera
     } else {
         choosePhotoFromLibrary()
         }
@@ -241,10 +242,10 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
             let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
             alertController.addAction(cancelAction)
             
-            let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: nil)
-            alertController.addAction(takePhotoAction)
-            
-            let chooseFromLibraryAction = UIAlertAction(title: "Choose From Library", style: .Default, handler: nil)
+            let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler:{ _ in self.takePhotoWithCamera() })
+            alertController.addAction(takePhotoAction)//A handler is a closure that calls the corresponding method from the extension.
+            //the parameter that is passed to this closure is a reference to the UIAlertAction itself
+            let chooseFromLibraryAction = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary()} )
             alertController.addAction(chooseFromLibraryAction)
             
             presentViewController(alertController, animated: true, completion: nil)
