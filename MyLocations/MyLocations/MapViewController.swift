@@ -48,6 +48,20 @@ class MapViewController: UIViewController {
             }
         }
     }
+    
+    func updateLocations() {
+        mapView.removeAnnotations(locations)//an annotation is a pin on the map
+        
+        let entity = NSEntityDescription.entityForName("Location", inManagedObjectContext: managedObjectContext)
+        
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entity
+        
+        locations = try! managedObjectContext.executeFetchRequest(fetchRequest) as! [Location]
+        mapView.addAnnotations(locations)
+        
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,4 +168,12 @@ extension MapViewController: MKMapViewDelegate {
         return annotationView
         }
     }
+
+extension MapViewController: UINavigationBarDelegate {
+    
+    func positionForBar(
+    bar: UIBarPositioning) -> UIBarPosition {
+    return .TopAttached
+    }
+}
 
