@@ -25,6 +25,8 @@ class LocationDetailsViewController: UITableViewController {
     @IBOutlet weak var longitudeLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var addPhotoLabel: UILabel!
     
     var coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var placemark: CLPlacemark?
@@ -32,6 +34,14 @@ class LocationDetailsViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext!
     var date = NSDate()
     var descriptionText = ""
+    
+    var image: UIImage? {
+        didSet {
+            if let image = image {
+                showImage(image)
+            }
+        }
+    }
     
     var locationToEdit: Location? {
         didSet {
@@ -184,6 +194,7 @@ class LocationDetailsViewController: UITableViewController {
         } else if indexPath.section == 1 && indexPath.row == 0 {
             pickPhoto()
              }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -198,11 +209,18 @@ class LocationDetailsViewController: UITableViewController {
         categoryName = controller.selectedCategoryName
         categoryLabel.text = categoryName
     }
+    
+    func showImage(image: UIImage) {
+        imageView.image = image
+        imageView.hidden = false
+        imageView.frame = CGRect(x: 10, y: 10, width: 260, height: 260)
+        addPhotoLabel.hidden = true
+    }
 }
 
 extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func takePhotoWithCamara() {
+    //LocationDetailsViewController must conform to both UIImagePickerControllerDelegate and UINavigationControllerDelegate to provide picking photo function, but you don’t have to implement any of the UINavigationControllerDelegate methods.
+    func takePhotoWithCamera() {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .Camera
         imagePicker.delegate = self
@@ -219,7 +237,14 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-            dismissViewControllerAnimated(true, completion: nil)
+                
+       image = info[UIImagePickerControllerEditedImage] as? UIImage
+                
+       /*if let image = image {
+        showImage(image)
+        } this code is replaced to the observer for image variable as alternative variant*/
+
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -233,7 +258,7 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
         choosePhotoFromLibrary()
         }
     }
-    
+   
     func showPhotoMenu() {
             
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
@@ -241,10 +266,10 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
             let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
             alertController.addAction(cancelAction)
             
-            let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: nil)
-            alertController.addAction(takePhotoAction)
-            
-            let chooseFromLibraryAction = UIAlertAction(title: "Choose From Library", style: .Default, handler: nil)
+            let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler:{ _ in self.takePhotoWithCamera() })
+            alertController.addAction(takePhotoAction)//A handler is a closure that calls the corresponding method from the extension.
+            //you ignore the parameter that is passed to this closure which is a reference to the UIAlertAction itself
+            let chooseFromLibraryAction = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary()} )
             alertController.addAction(chooseFromLibraryAction)
             
             presentViewController(alertController, animated: true, completion: nil)

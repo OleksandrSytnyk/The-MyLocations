@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
@@ -160,6 +160,10 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Qvy-BP-fMC">
+                                                    <rect key="frame" x="99" y="-42" width="240" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -283,10 +287,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addPhotoLabel" destination="TiQ-8s-miU" id="Saf-Co-xiF"/>
                         <outlet property="addressLabel" destination="Bcy-D1-SBw" id="Vjn-MW-b6g"/>
                         <outlet property="categoryLabel" destination="Duk-Zd-BVz" id="lWh-IT-Gd3"/>
                         <outlet property="dateLabel" destination="pGi-yS-WaE" id="gtd-sk-Nzm"/>
                         <outlet property="descriptionTextView" destination="inQ-a7-boI" id="mHX-AE-IvH"/>
+                        <outlet property="imageView" destination="Qvy-BP-fMC" id="NZD-vq-jFo"/>
                         <outlet property="latitudeLabel" destination="nlD-Zh-ySQ" id="H8v-G6-Dn3"/>
                         <outlet property="longitudeLabel" destination="J2p-Me-Qpd" id="H1s-a2-lQy"/>
                     </connections>
@@ -496,6 +502,6 @@
         <image name="first" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CB1-4E-Nbb"/>
+        <segue reference="UPS-U8-9wE"/>
     </inferredMetricsTieBreakers>
 </document>

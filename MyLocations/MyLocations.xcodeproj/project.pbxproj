@@ -91,12 +91,12 @@
 				E4DFB6181C7D92FF00B36E47 /* HudView.swift */,
 				E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */,
 				E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */,
-				E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */,
-				E4B2A3F61C6E0A2200F2EC45 /* Main.storyboard */,
-				E4B2A3F41C6E0A2200F2EC45 /* SecondViewController.swift */,
-				E4AB41C61C85C5AF006526DE /* LocationsViewController.swift */,
 				E4AB41CC1C860380006526DE /* LocationCell.swift */,
+				E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */,
+				E4AB41C61C85C5AF006526DE /* LocationsViewController.swift */,
+				E4B2A3F61C6E0A2200F2EC45 /* Main.storyboard */,
 				E4D82F971C8AB01700BC4AE9 /* MapViewController.swift */,
+				E4B2A3F41C6E0A2200F2EC45 /* SecondViewController.swift */,
 			);
 			path = MyLocations;
 			sourceTree = "<group>";
