@@ -57,6 +57,18 @@ class LocationDetailsViewController: UITableViewController {
         }
     }
     
+    func listenForBackgroundNotification() {
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(
+        UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
+            
+        if self.presentedViewController != nil {
+            self.dismissViewControllerAnimated(false, completion: nil)
+        }
+            
+        self.descriptionTextView.resignFirstResponder() }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,6 +90,8 @@ class LocationDetailsViewController: UITableViewController {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("hideKeyboard:"))
         gestureRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(gestureRecognizer)
+            
+        listenForBackgroundNotification()
     }
     
     func hideKeyboard(gestureRecognizer: UIGestureRecognizer) {
