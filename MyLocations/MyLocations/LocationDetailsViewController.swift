@@ -34,11 +34,13 @@ class LocationDetailsViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext!
     var date = NSDate()
     var descriptionText = ""
+    var imageCellHeight: CGFloat = 280
     
     var image: UIImage? {
         didSet {
-            if let image = image {
-                showImage(image)
+            
+      if let image = image {
+        showImage(image)
             }
         }
     }
@@ -114,7 +116,6 @@ class LocationDetailsViewController: UITableViewController {
     func formatDate(date: NSDate) -> String {
                 return dateFormatter.stringFromDate(date)
     }
-
     
     @IBAction func done() {
         let hudView = HudView.hudInView(navigationController!.view,
@@ -172,7 +173,7 @@ class LocationDetailsViewController: UITableViewController {
         if imageView.hidden {
         return 44
         } else {
-        return 280
+        return imageCellHeight
         }
             
         } else if indexPath.section == 2 && indexPath.row == 2 {
@@ -221,8 +222,9 @@ class LocationDetailsViewController: UITableViewController {
     func showImage(image: UIImage) {
         imageView.image = image
         imageView.hidden = false
-        imageView.frame = CGRect(x: 10, y: 10, width: 260, height: 260)
+        imageView.frame = CGRect(x: 10, y: 10, width: 260, height:  (image.size.height / image.size.width) * imageView.frame.size.width)
         addPhotoLabel.hidden = true
+        imageCellHeight = imageView.frame.height
     }
 }
 
@@ -251,7 +253,7 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
        /*if let image = image {
         showImage(image)
         } this code is replaced to the observer for image variable as alternative variant*/
-        tableView.reloadData()
+         tableView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -283,3 +285,4 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
             presentViewController(alertController, animated: true, completion: nil)
     }
 }
+
