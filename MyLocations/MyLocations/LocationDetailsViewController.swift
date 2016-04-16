@@ -35,6 +35,7 @@ class LocationDetailsViewController: UITableViewController {
     var date = NSDate()
     var descriptionText = ""
     var imageCellHeight: CGFloat = 280
+    var observer: AnyObject!
     
     var image: UIImage? {
         didSet {
@@ -57,16 +58,24 @@ class LocationDetailsViewController: UITableViewController {
         }
     }
     
+    deinit {
+        print("*** deinit \(self)")
+        NSNotificationCenter.defaultCenter().removeObserver(observer)
+    }
+    
     func listenForBackgroundNotification() {
         
-        NSNotificationCenter.defaultCenter().addObserverForName(
-        UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
-            
-        if self.presentedViewController != nil {
-            self.dismissViewControllerAnimated(false, completion: nil)
+        observer = NSNotificationCenter.defaultCenter().addObserverForName(
+        UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) {[weak self] _ in
+        
+        if let strongSelf = self {
+        if strongSelf.presentedViewController != nil {
+            strongSelf.dismissViewControllerAnimated(false, completion: nil)
         }
             
-        self.descriptionTextView.resignFirstResponder() }
+        strongSelf.descriptionTextView.resignFirstResponder()
+            }
+        }
     }
     
     override func viewDidLoad() {
