@@ -166,26 +166,24 @@ class LocationDetailsViewController: UITableViewController {
     // MARK: - UITableViewDelegate
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 && indexPath.row == 0 {
+        
+        switch (indexPath.section, indexPath.row) {
+        
+        case (0, 0):
             return 88
-        } else if indexPath.section == 1 {
-             
-        if imageView.hidden {
-        return 44
-        } else {
-        return imageCellHeight
-        }
             
-        } else if indexPath.section == 2 && indexPath.row == 2 {
-          addressLabel.frame.size = CGSize(width: view.bounds.size.width - 115, height: 10000)//115 points less than the width of the screen
-            //Because you’re changing the frame property, the multi-line UILabel will now word- wrap the text to fit the requested width. This works because you already set the text on the label in viewDidLoad().
-            addressLabel.sizeToFit()
-            //A rectangle whose height is10,000 points is tall enough to fit a lot of text and now you’ll have to size the label back to the proper height
-            addressLabel.frame.origin.x = view.bounds.size.width - addressLabel.frame.size.width - 15
-            //The call to sizeToFit() removed any spare space to the right and bottom of the label. It may also have changed the width so that the text fits inside the label as snugly as possible, but because of that the X-position of the label may no longer be correct.
-            return addressLabel.frame.size.height + 28// we didn't know the label height before but now we can know using height property
-        } else {
-            return 44
+        case (1, _):
+                return imageView.hidden ? 44 : imageCellHeight
+            
+        case (2, 2):
+            addressLabel.frame.size = CGSize( width: view.bounds.size.width - 115, height: 10000)//115 points less than the width of the screen
+                //Because you’re changing the frame property, the multi-line UILabel will now word- wrap the text to fit the requested width. This works because you already set the text on the label in viewDidLoad().
+            addressLabel.sizeToFit()//A rectangle whose height is10,000 points is tall enough to fit a lot of text and now you’ll have to size the label back to the proper height
+            addressLabel.frame.origin.x = view.bounds.size.width - addressLabel.frame.size.width - 15//The call to sizeToFit() removed any spare space to the right and bottom of the label. It may also have changed the width so that the text fits inside the label as snugly as possible, but because of that the X-position of the label may no longer be correct.
+        return
+            addressLabel.frame.size.height + 20 // we didn't know the label height before but now we can know using height property
+        default:
+                return 44
         }
     }
     
