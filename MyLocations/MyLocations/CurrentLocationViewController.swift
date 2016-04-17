@@ -222,23 +222,30 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     func stringFromPlacemark (placemark: CLPlacemark) -> String {
         var line1 = ""
         
-        if let s = placemark.subThoroughfare {//subThoroughfare is a strange name for house number.
-        line1 += s + " "
-        }
-        if let s = placemark.thoroughfare {//the thoroughfare is the street name
-        line1 += s
-        }
+        line1 = addText(placemark.subThoroughfare, toLine: line1, withSeparator: "")
+        line1 = addText(placemark.thoroughfare, toLine: line1, withSeparator: " ")
+        
         var line2 = ""
-        if let s = placemark.locality {//the locality is the city name
-        line2 += s + " "
+        
+        line2 = addText(placemark.locality, toLine: line2, withSeparator: "")
+        line2 = addText(placemark.administrativeArea, toLine: line2, withSeparator: " ")
+        line2 = addText(placemark.postalCode, toLine: line2,
+            withSeparator: " ")
+        
+        return addText(line2, toLine: line1, withSeparator: "\n")
+    }
+    
+    func addText(text: String?, toLine line: String, withSeparator separator: String) -> String {
+        var result = line
+        
+        if let text = text {
+            
+        if !line.isEmpty {
+        result += separator
+            }
+        result += text
         }
-        if let s = placemark.administrativeArea {//the administrativearea is the state or province name
-        line2 += s + " "
-        }
-        if let s = placemark.postalCode {
-        line2 += s
-        }
-        return line1 + "\n" + line2
+        return result
     }
     
     func didTimeOut() {
@@ -261,4 +268,3 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         }
     }
 }
-
