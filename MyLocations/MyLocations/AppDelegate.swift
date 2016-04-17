@@ -87,8 +87,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)//create the NSManagedObjectContext object, which is the object that you use to talk to Core Data. You first make your changes to the context and then you call its save() method to store those changes permanently in the data store. That means every object that needs to do something with Core Data needs to have a reference to the NSManagedObjectContext object.
         context.persistentStoreCoordinator = coordinator
         //print(storeURL)
-        //print(documentsDirectory)
-            
+        print(documentsDirectory)
+         
         return context
         }
             
