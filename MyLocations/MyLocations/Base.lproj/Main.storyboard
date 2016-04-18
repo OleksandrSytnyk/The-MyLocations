@@ -467,12 +467,12 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Map" id="8oQ-gT-f06">
-                                        <barButtonItem key="leftBarButtonItem" title="Locations" id="lit-js-ZmV">
+                                        <barButtonItem key="leftBarButtonItem" image="Pin" id="lit-js-ZmV">
                                             <connections>
                                                 <action selector="showLocations" destination="qzP-FR-CLf" id="x91-8E-esR"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="User" id="crV-q4-qeC">
+                                        <barButtonItem key="rightBarButtonItem" image="User" id="crV-q4-qeC">
                                             <connections>
                                                 <action selector="showUser" destination="qzP-FR-CLf" id="W86-Fh-5Fl"/>
                                             </connections>
@@ -518,10 +518,12 @@
     <resources>
         <image name="Locations" width="30" height="30"/>
         <image name="Map" width="30" height="30"/>
+        <image name="Pin" width="24" height="24"/>
         <image name="Tag" width="30" height="30"/>
+        <image name="User" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="flv-TS-tsb"/>
+        <segue reference="CB1-4E-Nbb"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="0.93333333333333335" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
 </document>

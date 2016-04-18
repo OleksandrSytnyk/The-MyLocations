@@ -165,6 +165,7 @@ extension MapViewController: MKMapViewDelegate {
     if let index = locations.indexOf(annotation as! Location) {
         button.tag = index
         }
+        annotationView.tintColor = UIColor(white: 0.0, alpha: 0.5)
         return annotationView
         }
     }
