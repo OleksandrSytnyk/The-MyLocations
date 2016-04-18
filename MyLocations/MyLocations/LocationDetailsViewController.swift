@@ -267,7 +267,8 @@ class LocationDetailsViewController: UITableViewController {
 extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     //LocationDetailsViewController must conform to both UIImagePickerControllerDelegate and UINavigationControllerDelegate to provide picking photo function, but you don’t have to implement any of the UINavigationControllerDelegate methods.
     func takePhotoWithCamera() {
-        let imagePicker = UIImagePickerController()
+        let imagePicker = MyImagePickerController()
+        imagePicker.view.tintColor = view.tintColor
         imagePicker.sourceType = .Camera
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
@@ -275,7 +276,8 @@ extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func choosePhotoFromLibrary() {
-            let imagePicker = UIImagePickerController()
+            let imagePicker = MyImagePickerController()
+            imagePicker.view.tintColor = view.tintColor
             imagePicker.sourceType = .PhotoLibrary
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
