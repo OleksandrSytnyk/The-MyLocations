@@ -27,6 +27,10 @@ class LocationCell: UITableViewCell {
         let selectionView = UIView(frame: CGRect.zero)
         selectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.2)
         selectedBackgroundView = selectionView
+        
+        photoImageView.layer.cornerRadius = photoImageView.bounds.size.width / 2//this makes a perfect circle
+        photoImageView.clipsToBounds = true//this makes sure that the image view respects these rounded corners and does not draw outside them.
+        separatorInset = UIEdgeInsets(top: 0, left: 82, bottom: 0, right: 0)//this moves the separator lines between the cells a bit to the right so there are no lines between the thumbnail images.
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -61,6 +65,6 @@ class LocationCell: UITableViewCell {
         if location.hasPhoto, let image = location.photoImage {
         return image.resizedImageWithBounds(CGSize(width: 52, height: 52))
         }
-        return UIImage()//This returns an empty placeholder image.
+        return UIImage(named: "No Photo")!
     }
 }
