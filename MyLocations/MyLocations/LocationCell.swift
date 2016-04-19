@@ -17,7 +17,16 @@ class LocationCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        backgroundColor = UIColor.blackColor()
+        descriptionLabel.textColor = UIColor.whiteColor()
+        descriptionLabel.highlightedTextColor = descriptionLabel.textColor
+        addressLabel.textColor = UIColor(white: 1.0, alpha: 0.4)
+        addressLabel.highlightedTextColor = addressLabel.textColor
+        
+        let selectionView = UIView(frame: CGRect.zero)
+        selectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.2)
+        selectedBackgroundView = selectionView
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
