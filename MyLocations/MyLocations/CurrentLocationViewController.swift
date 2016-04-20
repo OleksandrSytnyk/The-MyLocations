@@ -14,6 +14,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var tagButton: UIButton!
     @IBOutlet weak var getButton: UIButton!
+    @IBOutlet weak var containerView: UIView!
     
     let locationManager = CLLocationManager()
     var location: CLLocation?
@@ -25,6 +26,20 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     var lastGeocodingError: NSError?
     var timer: NSTimer?
     var managedObjectContext: NSManagedObjectContext!
+    var logoVisible = false
+    
+    lazy var logoButton: UIButton = {
+        
+        let button = UIButton(type: .Custom)
+        
+        button.setBackgroundImage(UIImage(named: "Logo"), forState: .Normal)
+        button.sizeToFit()
+        button.addTarget(self, action: Selector("getLocation"), forControlEvents: .TouchUpInside)
+        button.center.x = CGRectGetMidX(self.view.bounds)
+        button.center.y = 220
+        
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +62,10 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         
         if authStatus == .Denied || authStatus == .Restricted { showLocationServicesDeniedAlert()
             return
+        }
+        
+        if logoVisible {
+            hideLogoView()
         }
         
         if updatingLocation {
@@ -154,26 +173,26 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         tagButton.hidden = false
         messageLabel.text = ""
            
-            if let placemark = placemark {
-                addressLabel.text = stringFromPlacemark(placemark)
+         if let placemark = placemark {
+            addressLabel.text = stringFromPlacemark(placemark)
             } else if performingReverseGeocoding {
-                addressLabel.text = "Searching for Address..."
+            addressLabel.text = "Searching for Address..."
             } else if lastGeocodingError != nil {
-                addressLabel.text = "Error Finding Address"
+            addressLabel.text = "Error Finding Address"
             } else {
-                addressLabel.text = "No Address Found"
+            addressLabel.text = "No Address Found"
             }
-    } else {
-        latitudeLabel.text = ""
-        longitudeLabel.text = ""
-        addressLabel.text = ""
-        tagButton.hidden = true
-        messageLabel.text = "Tap 'Get My Location' to Start"
+        } else {
+         latitudeLabel.text = ""
+         longitudeLabel.text = ""
+         addressLabel.text = ""
+         tagButton.hidden = true
+         messageLabel.text = "Tap 'Get My Location' to Start"
             
-            let statusMessage: String
-            if let error = lastLocationError {
-                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
-                statusMessage = "Location Service Disabled"
+        let statusMessage: String
+        if let error = lastLocationError {
+         if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
+            statusMessage = "Location Service Disabled"
             } else {
                 statusMessage = "Error Getting Location"
                 }
@@ -182,7 +201,8 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             } else if updatingLocation {
                 statusMessage = "Searching..."
             } else {
-                statusMessage = "Tap 'Get My Location' to Start"
+                statusMessage = ""
+                showLogoView()
             }
             messageLabel.text = statusMessage
         }
@@ -253,5 +273,21 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         controller.placemark = placemark
         controller.managedObjectContext = managedObjectContext
         }
+    }
+    
+    // MARK: - Logo View
+    func showLogoView() {
+            
+        if !logoVisible {
+            logoVisible = true
+            containerView.hidden = true
+            view.addSubview(logoButton)
+            }
+    }
+    
+    func hideLogoView() {
+        logoVisible = false
+        containerView.hidden = false
+        logoButton.removeFromSuperview()
     }
 }
