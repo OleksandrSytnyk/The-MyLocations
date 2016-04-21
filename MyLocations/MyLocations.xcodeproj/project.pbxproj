@@ -19,7 +19,6 @@
 		E4B2A3F31C6E0A2200F2EC45 /* CurrentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2A3F21C6E0A2200F2EC45 /* CurrentLocationViewController.swift */; };
 		E4B2A3F81C6E0A2200F2EC45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3F61C6E0A2200F2EC45 /* Main.storyboard */; };
 		E4B2A3FA1C6E0A2200F2EC45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3F91C6E0A2200F2EC45 /* Assets.xcassets */; };
-		E4B2A3FD1C6E0A2300F2EC45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */; };
 		E4D05F291C80E23A0096DCBC /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D05F271C80E23A0096DCBC /* Location+CoreDataProperties.swift */; };
 		E4D05F2A1C80E23A0096DCBC /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D05F281C80E23A0096DCBC /* Location.swift */; };
 		E4D437EF1C7B9CA10062C68B /* CategoryPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D437EE1C7B9CA00062C68B /* CategoryPickerViewController.swift */; };
@@ -45,7 +44,6 @@
 		E4B2A3F21C6E0A2200F2EC45 /* CurrentLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationViewController.swift; sourceTree = "<group>"; };
 		E4B2A3F71C6E0A2200F2EC45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E4B2A3F91C6E0A2200F2EC45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E4B2A3FC1C6E0A2300F2EC45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4D05F271C80E23A0096DCBC /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E4D05F281C80E23A0096DCBC /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -101,7 +99,6 @@
 				E43600451C7F2F4D00A2298E /* Functions.swift */,
 				E4DFB6181C7D92FF00B36E47 /* HudView.swift */,
 				E4B2A3FE1C6E0A2300F2EC45 /* Info.plist */,
-				E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */,
 				E4AB41CC1C860380006526DE /* LocationCell.swift */,
 				E46C14381C79A1F60011F9BF /* LocationDetailsViewController.swift */,
 				E4AB41C61C85C5AF006526DE /* LocationsViewController.swift */,
@@ -182,7 +179,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B2A3FD1C6E0A2300F2EC45 /* LaunchScreen.storyboard in Resources */,
 				E4B2A3FA1C6E0A2200F2EC45 /* Assets.xcassets in Resources */,
 				E4D9BDE71CC8B1E90060072A /* Sound.caf in Resources */,
 				E4B2A3F81C6E0A2200F2EC45 /* Main.storyboard in Resources */,
@@ -225,14 +221,6 @@
 				E4B2A3F71C6E0A2200F2EC45 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		E4B2A3FB1C6E0A2300F2EC45 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E4B2A3FC1C6E0A2300F2EC45 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -323,6 +311,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = MyLocations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Oleksandr.MyLocations;
@@ -334,6 +323,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = MyLocations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Oleksandr.MyLocations;
