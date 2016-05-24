@@ -152,7 +152,7 @@
 				TargetAttributes = {
 					E4B2A3EC1C6E0A2200F2EC45 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = PZQCK5T4Z8;
+						DevelopmentTeam = J62JYLRG76;
 					};
 				};
 			};
@@ -312,9 +312,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Oleksandr Sytnyk (J62JYLRG76)";
 				INFOPLIST_FILE = MyLocations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Oleksandr.MyLocations;
+				PRODUCT_BUNDLE_IDENTIFIER = com.OleksandrSytnyk.CollectLocations;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -324,9 +325,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Oleksandr Sytnyk (J62JYLRG76)";
 				INFOPLIST_FILE = MyLocations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Oleksandr.MyLocations;
+				PRODUCT_BUNDLE_IDENTIFIER = com.OleksandrSytnyk.CollectLocations;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
