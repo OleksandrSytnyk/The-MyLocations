@@ -58,26 +58,6 @@ class LocationDetailsViewController: UITableViewController {
         }
     }
     
-    deinit {
-        print("*** deinit \(self)")
-        NSNotificationCenter.defaultCenter().removeObserver(observer)
-    }
-    
-    func listenForBackgroundNotification() {
-        
-        observer = NSNotificationCenter.defaultCenter().addObserverForName(
-        UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) {[weak self] _ in
-        
-        if let strongSelf = self {
-        if strongSelf.presentedViewController != nil {
-            strongSelf.dismissViewControllerAnimated(false, completion: nil)
-        }
-            
-        strongSelf.descriptionTextView.resignFirstResponder()
-            }
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -132,6 +112,26 @@ class LocationDetailsViewController: UITableViewController {
         descriptionTextView.resignFirstResponder()
     }
     
+    func listenForBackgroundNotification() {
+        
+        observer = NSNotificationCenter.defaultCenter().addObserverForName(
+            UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) {[weak self] _ in
+                
+                if let strongSelf = self {
+                    if strongSelf.presentedViewController != nil {
+                        strongSelf.dismissViewControllerAnimated(false, completion: nil)
+                    }
+                    
+                    strongSelf.descriptionTextView.resignFirstResponder()
+                }
+        }
+    }
+    
+    deinit {
+        print("*** deinit \(self)")
+        NSNotificationCenter.defaultCenter().removeObserver(observer)
+    }
+    
     func stringFromPlacemark(placemark: CLPlacemark) -> String {
         var line = ""
         
@@ -147,6 +147,14 @@ class LocationDetailsViewController: UITableViewController {
     
     func formatDate(date: NSDate) -> String {
                 return dateFormatter.stringFromDate(date)
+    }
+    
+    func showImage(image: UIImage) {
+        imageView.image = image
+        imageView.hidden = false
+        imageView.frame = CGRect(x: 10, y: 10, width: 260, height:  (image.size.height / image.size.width) * imageView.frame.size.width)
+        addPhotoLabel.hidden = true
+        imageCellHeight = imageView.frame.height
     }
     
     @IBAction func done() {
@@ -215,6 +223,19 @@ class LocationDetailsViewController: UITableViewController {
             dismissViewControllerAnimated(true, completion: nil)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "PickCategory" {
+            let controller = segue.destinationViewController as! CategoryPickerViewController
+            controller.selectedCategoryName = categoryName
+        }
+    }
+    
+    @IBAction func categoryPickerDidPickCategory(segue: UIStoryboardSegue) {
+        let controller = segue.sourceViewController as! CategoryPickerViewController
+        categoryName = controller.selectedCategoryName
+        categoryLabel.text = categoryName
+    }
+    
     // MARK: - UITableViewDelegate
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -279,27 +300,6 @@ class LocationDetailsViewController: UITableViewController {
                 addressLabel.textColor = UIColor.whiteColor()
                 addressLabel.highlightedTextColor = addressLabel.textColor
             }
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-            if segue.identifier == "PickCategory" {
-            let controller = segue.destinationViewController as! CategoryPickerViewController
-            controller.selectedCategoryName = categoryName
-            }
-    }
-    
-      @IBAction func categoryPickerDidPickCategory(segue: UIStoryboardSegue) {
-        let controller = segue.sourceViewController as! CategoryPickerViewController
-        categoryName = controller.selectedCategoryName
-        categoryLabel.text = categoryName
-    }
-    
-    func showImage(image: UIImage) {
-        imageView.image = image
-        imageView.hidden = false
-        imageView.frame = CGRect(x: 10, y: 10, width: 260, height:  (image.size.height / image.size.width) * imageView.frame.size.width)
-        addPhotoLabel.hidden = true
-        imageCellHeight = imageView.frame.height
     }
 }
 

@@ -44,27 +44,16 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateLabels()
-        configureGetButton()
-        loadSoundEffect("Sound.caf")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func getLocation() {
         let authStatus = CLLocationManager.authorizationStatus()
         
         if authStatus == .NotDetermined {
-            locationManager.requestWhenInUseAuthorization()
+            locationManager.requestWhenInUseAuthorization()//Requests permission to use location services while the app is in the foreground.
             return
         }
         
-        if authStatus == .Denied || authStatus == .Restricted { showLocationServicesDeniedAlert()
+        if authStatus == .Denied || authStatus == .Restricted {//.Denied is explicitely denied the use of the service, .Restricted is denied the use of the service for the app
+            showLocationServicesDeniedAlert()
             return
         }
         
@@ -85,6 +74,142 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         updateLabels()
         configureGetButton()
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateLabels()
+        configureGetButton()
+        loadSoundEffect("Sound.caf")
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func showLocationServicesDeniedAlert() {
+        let alert = UIAlertController(title: "Location Services Disabled",
+            message: "Please enable location services for this app in Settings.",
+            preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+        presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(okAction)
+    }//This pops up an alert with a helpful hint.
+    
+    func startLocationManager() {
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+            updatingLocation = true
+            
+            timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: Selector("didTimeOut"), userInfo: nil, repeats: false)
+            //it's a timer object that sends the “didTimeOut” message to self after 60 seconds; didTimeOut is the name of a method that you have to provide.
+        }
+    }
+    
+    func stopLocationManager() {
+        if updatingLocation {
+            if let timer = timer {
+                timer.invalidate()//Stops the receiver from ever firing again and requests its removal from its run loop.This method is the only way to remove a timer from an NSRunLoop object. It's to cancel the timer in case the location manager is stopped before the time-out fires.
+            }
+            locationManager.stopUpdatingLocation()
+            locationManager.delegate = nil
+            updatingLocation = false
+        }
+    }
+    
+    func didTimeOut() {
+        print("*** Time out")
+        if location == nil {
+            stopLocationManager()
+            lastLocationError = NSError(domain: "MYLocationErrorDomain", code: 1, userInfo: nil)// So it's not an error from kCLErrorDomain. It's user's own domain which is just a String.
+            updateLabels()
+            configureGetButton()
+        }
+    }
+    
+    func updateLabels() {
+        if let location = location {//that it’s OK for the unwrapped variable to have the same name as the optional
+            latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)
+            longitudeLabel.text = String(format: "%.8f", location.coordinate.longitude)
+            tagButton.hidden = false
+            messageLabel.text = ""
+            
+            if let placemark = placemark {
+                addressLabel.text = stringFromPlacemark(placemark)
+            } else if performingReverseGeocoding {
+                addressLabel.text = "Searching for Address..."
+            } else if lastGeocodingError != nil {
+                addressLabel.text = "Error Finding Address"
+            } else {
+                addressLabel.text = "No Address Found"
+            }
+        } else {
+            latitudeLabel.text = ""
+            longitudeLabel.text = ""
+            addressLabel.text = ""
+            tagButton.hidden = true
+            messageLabel.text = "Tap 'Get My Location' to Start"
+            
+            let statusMessage: String
+            if let error = lastLocationError {
+                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
+                    statusMessage = "Location Service Disabled"
+                } else {
+                    statusMessage = "Error Getting Location"
+                }
+            } else if !CLLocationManager.locationServicesEnabled(){
+                statusMessage = "Location Service Disabled"
+            } else if updatingLocation {
+                statusMessage = "Searching..."
+            } else {
+                statusMessage = ""
+                showLogoView()
+            }
+            messageLabel.text = statusMessage
+        }
+    }
+    
+    func stringFromPlacemark (placemark: CLPlacemark) -> String {
+        var line1 = ""
+        
+        line1.addText(placemark.subThoroughfare)
+        line1.addText(placemark.thoroughfare, withSeparator: " ")
+        
+        var line2 = ""
+        
+        line2.addText(placemark.locality)
+        line2.addText(placemark.administrativeArea, withSeparator: " ")
+        line2.addText(placemark.postalCode, withSeparator: " ")
+        
+        line1.addText(line2, withSeparator: "\n")
+        return line1
+    }
+    
+    func configureGetButton() {
+        let spinnerTag = 1000
+        
+        if updatingLocation {
+            getButton.setTitle("Stop", forState: .Normal)
+            
+            if view.viewWithTag(spinnerTag) == nil {
+                let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
+                spinner.center = messageLabel.center
+                spinner.center.y += spinner.bounds.size.height/2 + 15
+                spinner.startAnimating()
+                spinner.tag = spinnerTag
+                containerView.addSubview(spinner)//this makes the spinner visible
+            }
+        } else {
+            getButton.setTitle("Get My Location", forState: .Normal)
+            if let spinner = view.viewWithTag(spinnerTag) {
+                spinner.removeFromSuperview()
+            }
+        }
+    }
+
+    
 
     // MARK: - CLLocationManagerDelegate
     
@@ -102,13 +227,13 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
-        print("didUpdateWithError \(newLocation)")
+        print("didUpdateLocations \(newLocation)")
         
-        if newLocation.timestamp.timeIntervalSinceNow < -5 {// it's the time that has elapsed since the last location fix
+        if newLocation.timestamp.timeIntervalSinceNow < -5 {// On the axe of time it's the coordinate of the point for the last location fix while zero on it corresponds to the present moment
             return
         }
         
-        if newLocation.horizontalAccuracy < 0 {
+        if newLocation.horizontalAccuracy < 0 {//this checks if location’s latitude and/or longitude are invalid.
             return
         }
         
@@ -136,7 +261,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             if !performingReverseGeocoding {
                 print("*** Going to geocode")
                 performingReverseGeocoding = true
-                geocoder.reverseGeocodeLocation(newLocation, completionHandler: {
+                geocoder.reverseGeocodeLocation(newLocation, completionHandler: {//Usually there will be only one CLPlacemark object in the array placemarks but there is the odd situation where one location coordinate may refer to more than one address.
                 placemarks, error in
                 print("*** Found placemarks: \(placemarks), error: \(error)")
                 
@@ -160,136 +285,14 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
             let timeInterval = newLocation.timestamp.timeIntervalSinceDate(location!.timestamp)
             if timeInterval > 10 {
             print("*** Forcedone!")
-            }
             stopLocationManager()
             updateLabels()
             configureGetButton()
-        }
-    }
-    
-    func showLocationServicesDeniedAlert() {
-        let alert = UIAlertController(title: "Location Services Disabled",
-        message: "Please enable location services for this app in Settings.",
-        preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-        presentViewController(alert, animated: true, completion: nil)
-        alert.addAction(okAction)
-    }//This pops up an alert with a helpful hint.
-    
-    func updateLabels() {
-        if let location = location {//that it’s OK for the unwrapped variable to have the same name as the optional
-        latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)
-        longitudeLabel.text = String(format: "%.8f", location.coordinate.longitude)
-        tagButton.hidden = false
-        messageLabel.text = ""
-           
-         if let placemark = placemark {
-            addressLabel.text = stringFromPlacemark(placemark)
-            } else if performingReverseGeocoding {
-            addressLabel.text = "Searching for Address..."
-            } else if lastGeocodingError != nil {
-            addressLabel.text = "Error Finding Address"
-            } else {
-            addressLabel.text = "No Address Found"
             }
-        } else {
-         latitudeLabel.text = ""
-         longitudeLabel.text = ""
-         addressLabel.text = ""
-         tagButton.hidden = true
-         messageLabel.text = "Tap 'Get My Location' to Start"
-            
-        let statusMessage: String
-        if let error = lastLocationError {
-         if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
-            statusMessage = "Location Service Disabled"
-            } else {
-                statusMessage = "Error Getting Location"
-                }
-            } else if !CLLocationManager.locationServicesEnabled(){
-                statusMessage = "Location Service Disabled"
-            } else if updatingLocation {
-                statusMessage = "Searching..."
-            } else {
-                statusMessage = ""
-                showLogoView()
-            }
-            messageLabel.text = statusMessage
         }
     }
    
-    func stopLocationManager() {
-        if updatingLocation {
-            if let timer = timer {
-                timer.invalidate()//to cancel the timer in case the location manager is stopped before the time-out fires.
-            }
-        locationManager.startUpdatingLocation()
-        locationManager.delegate = nil
-        updatingLocation = false
-        }
-    }
-    
-        func startLocationManager() {
-        if CLLocationManager.locationServicesEnabled() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.startUpdatingLocation()
-        updatingLocation = true
-            
-        timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: Selector("didTimeOut"), userInfo: nil, repeats: false)
-            //it's a timer object that sends the “didTimeOut” message to self after 60 seconds; didTimeOut is the name of a method that you have to provide.
-        }
-    }
-    
-        func configureGetButton() {
-        let spinnerTag = 1000
-            
-        if updatingLocation {
-        getButton.setTitle("Stop", forState: .Normal)
-            
-        if view.viewWithTag(spinnerTag) == nil {
-            let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
-            spinner.center = messageLabel.center
-            spinner.center.y += spinner.bounds.size.height/2 + 15
-            spinner.startAnimating()
-            spinner.tag = spinnerTag
-            containerView.addSubview(spinner)//this makes the spinner visible
-            }
-        } else {
-        getButton.setTitle("Get My Location", forState: .Normal)
-            if let spinner = view.viewWithTag(spinnerTag) {
-                spinner.removeFromSuperview()
-            }
-        }
-    }
-    
-    func stringFromPlacemark (placemark: CLPlacemark) -> String {
-        var line1 = ""
-        
-        line1.addText(placemark.subThoroughfare)
-        line1.addText(placemark.thoroughfare, withSeparator: " ")
-        
-        var line2 = ""
-        
-        line2.addText(placemark.locality)
-        line2.addText(placemark.administrativeArea, withSeparator: " ")
-        line2.addText(placemark.postalCode, withSeparator: " ")
-        
-        line1.addText(line2, withSeparator: "\n")
-        return line1
-    }
-    
-    func didTimeOut() {
-        print("*** Time out")
-        if location == nil {
-        stopLocationManager()
-        lastLocationError = NSError(domain: "MYLocationErrorDomain", code: 1, userInfo: nil)// So it's not an error from kCLErrorDomain. It's user's own domain which is just a String.
-        updateLabels()
-        configureGetButton()
-        }
-    }
-    
-       override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "TagLocation" {
         let navigationController = segue.destinationViewController as! UINavigationController
         let controller = navigationController.topViewController as! LocationDetailsViewController
@@ -326,7 +329,7 @@ class CurrentLocationViewController: UIViewController, CLLocationManagerDelegate
         panelMover.fromValue = NSValue(CGPoint: containerView.center)
         panelMover.toValue = NSValue(CGPoint:CGPoint(x: centerX, y: containerView.center.y))
         panelMover.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-        panelMover.delegate = self
+        panelMover.delegate = self //The methods for this delegate are not declared in a protocol, so there is no need to add anything to your class line. This is also known as an informal protocol. It’s a holdover from the early days of Objective-C.
         containerView.layer.addAnimation(panelMover, forKey: "panelMover")
         
         let logoMover = CABasicAnimation(keyPath: "position")

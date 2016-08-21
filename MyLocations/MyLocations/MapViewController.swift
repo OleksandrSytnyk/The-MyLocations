@@ -31,6 +31,26 @@ class MapViewController: UIViewController {
                 userInfo: nil)
         }
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateLocations()
+        
+        if !locations.isEmpty {
+            showLocations()
+        }
+    }
+
+    @IBAction func showUser() {
+        let region = MKCoordinateRegionMakeWithDistance(
+            mapView.userLocation.coordinate, 1000, 1000)//this zooms in the map to a region that is 1000 by 1000 meters around the user’s position.
+        mapView.setRegion(mapView.regionThatFits(region), animated: true)
+    }
+    
+    @IBAction func showLocations() {
+        let region = regionForAnnotations(locations)
+        mapView.setRegion(region, animated: true)
+    }
    
     func updateLocation(location: Location) {
         if self.isViewLoaded() {
@@ -62,28 +82,7 @@ class MapViewController: UIViewController {
         
     }
 
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateLocations()
-         
-        if !locations.isEmpty {
-            showLocations()
-        }
-    }
-    
-    @IBAction func showUser() {
-    let region = MKCoordinateRegionMakeWithDistance(
-        mapView.userLocation.coordinate, 1000, 1000)//this zooms in the map to a region that is 1000 by 1000 meters around the user’s position.
-        mapView.setRegion(mapView.regionThatFits(region), animated: true)
-    }
-    
-    @IBAction func showLocations() {
-        let region = regionForAnnotations(locations)
-        mapView.setRegion(region, animated: true)
-    }
-    
-    func regionForAnnotations(annotations: [MKAnnotation]) -> MKCoordinateRegion {
+     func regionForAnnotations(annotations: [MKAnnotation]) -> MKCoordinateRegion {
         
         var region: MKCoordinateRegion
         

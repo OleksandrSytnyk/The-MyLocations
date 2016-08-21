@@ -41,6 +41,15 @@ var selectedIndexPath = NSIndexPath()
         tableView.indicatorStyle = .White
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "PickedCategory" {
+            let cell = sender as! UITableViewCell
+            if let indexPath = tableView.indexPathForCell(cell) {
+                selectedCategoryName = categories[indexPath.row]
+            }
+        }
+    }
+    
     // MARK: - UITableViewDataSource
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,15 +97,6 @@ var selectedIndexPath = NSIndexPath()
         let selectionView = UIView(frame: CGRect.zero)
         selectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.2)
         cell.selectedBackgroundView = selectionView
-    }
-    
-      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "PickedCategory" {
-        let cell = sender as! UITableViewCell
-        if let indexPath = tableView.indexPathForCell(cell) {
-        selectedCategoryName = categories[indexPath.row]
-            }
-        }
     }
     
 }

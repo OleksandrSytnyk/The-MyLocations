@@ -34,6 +34,10 @@ class LocationsViewController: UITableViewController {
         return fetchedResultsController
     }()//The fetched results controller keeps an eye on any changes that you make to the data store and notifies its delegate in response. It doesn’t matter where in the app you make these changes, they can happen on any screen.
     
+    deinit {
+        fetchedResultsController.delegate = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,8 +56,23 @@ class LocationsViewController: UITableViewController {
         }
     }
     
-    deinit {
-        fetchedResultsController.delegate = nil
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "EditLocation" {
+            let navigationController = segue.destinationViewController
+                as! UINavigationController
+            
+            let controller = navigationController.topViewController
+                as! LocationDetailsViewController
+            
+            controller.managedObjectContext = managedObjectContext
+            
+            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
+                
+                let location = fetchedResultsController.objectAtIndexPath(indexPath)  as! Location
+                
+                controller.locationToEdit = location//Because prepareForSegue() – and therefore locationToEdit’s didSet – is called before viewDidLoad(), this puts the right values on the screen when it becomes visible.
+            }
+        }
     }
     
     // MARK: - UITableViewDataSource
@@ -131,27 +150,6 @@ class LocationsViewController: UITableViewController {
         
         return view
     }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "EditLocation" {
-        let navigationController = segue.destinationViewController
-        as! UINavigationController
-        
-        let controller = navigationController.topViewController
-        as! LocationDetailsViewController
-        
-        controller.managedObjectContext = managedObjectContext
-        
-        if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-            
-             let location = fetchedResultsController.objectAtIndexPath(indexPath)  as! Location
-            
-            controller.locationToEdit = location//Because prepareForSegue() – and therefore locationToEdit’s didSet – is called before viewDidLoad(), this puts the right values on the screen when it becomes visible.
-            }
-        }
-    }
-    
-    
 }
 
 extension LocationsViewController: NSFetchedResultsControllerDelegate {
